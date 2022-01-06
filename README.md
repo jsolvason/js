@@ -14,7 +14,7 @@ To install these scripts I suggest doing the following:
     
     ```cd pybin``` 
     
-    ```git clone _________```
+    ```git clone https://github.com/jsolvason/js```
     
 3. Go back to your home directory 
 
