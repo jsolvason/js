@@ -38,4 +38,6 @@ To install these scripts I suggest doing the following:
     ```python```
 
     ```import js``` 
+    
+8. You will also need to install the python library ```Biopython``` to your conda environment to use some of my scripts. Activate the conda environment you will use ```js``` in and install the following conda package https://anaconda.org/anaconda/biopython
 
