@@ -8,6 +8,9 @@ def listModules():
     lsResult=[i.split('/')[-1] for i in lsResult]
     for i in lsResult: print(i)
 
+def mkdir_if_dir_not_exists(out_dir):
+    if not os.path.exists(out_dir): os.mkdir(out_dir)
+
 def basename(fn):
     return fn.split('/')[-1].split('.')[0]
 
