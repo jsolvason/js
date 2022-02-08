@@ -9,6 +9,18 @@ def revcomp(dna):
 		revcomp_dna.append(inv[nt])
 	return ''.join(revcomp_dna[::-1])
 
+def count_with_revcomp(pattern,seq):    
+	c=0
+	for s in [seq,revcomp(seq)]:
+		for kmer in get_kmers(s,len(pattern)):
+			if kmer==pattern:
+				c+=1
+	# if pattern is palindrom, div by 2 so you dont count same twice
+	if pattern==revcomp(pattern):
+		return int(c/2)
+	else:
+		return c
+
 
 def get_kmers(string,k):
 	'''Takes DNA sequence as input and a kmer length and YIELDS all kmers of length K in the sequence.'''

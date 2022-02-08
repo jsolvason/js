@@ -1,4 +1,14 @@
 import os
+import datetime
+
+def replace_chars_with_null(string,charList):
+    for c in charList:
+        string=string.replace(c,'')
+    return string
+
+def get_todays_datestring(format="%Y%m%d"):
+    dateString=datetime.date.today().strftime(format)
+    return dateString
 
 def get_basename(fn):
     return fn.split('/')[-1].split('.')[0]
@@ -14,8 +24,11 @@ def mkdir_if_dir_not_exists(out_dir):
 def basename(fn):
     return fn.split('/')[-1].split('.')[0]
 
-def percent(number):
-    return str(round(100*number,2))+' %'                                             
+def percent(number,rounding_digit=1):
+    if rounding_digit==0:
+        return str(int(100*number))+' %'
+    else:
+        return str(round(100*number,rounding_digit))+' %'                                             
 
 def million(number):
     return str(round(number/1e6,2))+ ' mil'
@@ -26,7 +39,7 @@ def write_row(rowList,delim='\t'):
 def strjoin(delim,l):
     return delim.join([str(i) for i in l])
 
-def read_tsv(fn,pc=False,header=True,breakBool=False,sep='\t',pc_list=False):
+def read_tsv(fn,pc,header,breakBool=False,sep='\t',pc_list=False):
     with open(fn,'r') as f:
         
         # If printing columns, skip header
