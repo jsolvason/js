@@ -1,6 +1,10 @@
 import os
 import datetime
 
+def flatten_list(l):
+    return [i for sublist in l for i in sublist]
+
+
 def replace_chars_with_null(string,charList):
     for c in charList:
         string=string.replace(c,'')
