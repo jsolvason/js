@@ -79,69 +79,9 @@ def faLoadGenome(file_genome):
 	chr2seq = {chrom:str(chr2seq[chrom].seq).upper() for chrom in chr2seq}
 	return chr2seq
 
-def faLoadGenome(pickled_file_genome):
+def pklLoadGenome(pickled_file_genome):
 	'''Loads arbitrary genome'''
 	with open(pickled_file_genome,'rb') as f:
 		chr2seq=pickle.load(f)
 	return chr2seq
 
-def pklLoadHg38(pickled_file_genome=f'/Users/joe/code/ref/genomes/human/hg38/hg38.fa.chr2seq.pydict.pickle'):
-	'''Loads arbitrary genome'''
-	with open(pickled_file_genome,'rb') as f:
-		chr2seq=pickle.load(f)
-	return chr2seq
-
-def pklLoadHg19(pickled_file_genome=f'/Users/joe/code/ref/genomes/human/hg19/hg19.fa.chr2seq.pydict.pickle'):
-	'''Loads arbitrary genome'''
-	with open(pickled_file_genome,'rb') as f:
-		chr2seq=pickle.load(f)
-	return chr2seq
-
-def faLoadCi08(file_genome=f'/Users/joe/code/ref/genomes/ciona/2008/JoinedScaffold.fasta' ):
-	'''Load 2008 ciona genome'''
-	Handle = open(file_genome, "r") 
-	chr2seq = SeqIO.to_dict(SeqIO.parse(Handle, "fasta")) 
-	chr2seq = {chrom:str(chr2seq[chrom].seq).upper() for chrom in chr2seq}
-	return chr2seq
-
-def faLoadCi19(file_genome=f'/Users/joe/code/ref/genomes/ciona/2019/HT.Ref.fasta'):
-	'''Load 2019 ciona genome'''
-	Handle = open(file_genome, "r")
-	chr2seq = SeqIO.to_dict(SeqIO.parse(Handle, "fasta"))
-	chr2seq = {chrom:str(chr2seq[chrom].seq).upper() for chrom in chr2seq}
-	return chr2seq
-
-def faLoadCi19_beta(file_genome=f'/Users/joe/code/ref/genomes/ciona/2019/HT.Ref.forBetaTesting.fasta'):
-	'''Load 2019 ciona genome (for beta testing, first 1kb of each chrom)'''
-	Handle = open(file_genome, "r")
-	chr2seq = SeqIO.to_dict(SeqIO.parse(Handle, "fasta"))
-	chr2seq = {chrom:str(chr2seq[chrom].seq).upper() for chrom in chr2seq}
-	return chr2seq
-
-def faLoadMm10(file_genome=f'/Users/joe/code/ref/genomes/mouse/mm10/mm10.fa'):
-	'''Load mm10 mouse genome'''
-	Handle = open(file_genome, "r")
-	chr2seq = SeqIO.to_dict(SeqIO.parse(Handle, "fasta"))
-	chr2seq = {chrom:str(chr2seq[chrom].seq).upper() for chrom in chr2seq}
-	return chr2seq
-
-def faLoadHg19(file_genome=f'/Users/joe/code/ref/genomes/human/hg19/hg19.fa'):
-	'''Load hg19  genome'''
-	Handle = open(file_genome, "r")
-	chr2seq = SeqIO.to_dict(SeqIO.parse(Handle, "fasta"))
-	chr2seq = {chrom:str(chr2seq[chrom].seq).upper() for chrom in chr2seq}
-	return chr2seq
-
-def faLoadHg38(file_genome=f'/Users/joe/code/ref/genomes/human/hg38/hg38.fa'):
-	'''Load hg38  genome'''
-	Handle = open(file_genome, "r")
-	chr2seq = SeqIO.to_dict(SeqIO.parse(Handle, "fasta"))
-	chr2seq = {chrom:str(chr2seq[chrom].seq).upper() for chrom in chr2seq}
-	return chr2seq
-
-def faLoadDr11(file_genome=f'/Users/joe/code/ref/genomes/zebrafish/danRer11/danRer11.fa'):
-	'''Load Zebrafish danRer11 genome'''
-	Handle = open(file_genome, "r")
-	chr2seq = SeqIO.to_dict(SeqIO.parse(Handle, "fasta"))
-	chr2seq = {chrom:str(chr2seq[chrom].seq).upper() for chrom in chr2seq}
-	return chr2seq

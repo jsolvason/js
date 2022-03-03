@@ -1,6 +1,26 @@
 from random import choice
 import itertools
 
+Iupac2AllNt= {
+        'A':['A'],
+        'C':['C'],
+        'G':['G'],
+        'T':['T'],
+        'R':['A','G'],
+        'Y':['C','T'],
+        'S':['G','C'],
+        'W':['A','T'],
+        'K':['G','T'],
+        'M':['A','C'],
+        'B':['C','G','T'],
+        'D':['A','G','T'],
+        'H':['A','C','T'],
+        'V':['A','C','G'],
+        'N':['A','C','G','T'],
+}
+
+ATGC=set(['A','T','G','C'])
+
 def revcomp(dna): 
 	'''Takes DNA sequence as input and returns reverse complement'''
 	inv={'A':'T','T':'A','G':'C','C':'G', 'N':'N'}
@@ -37,14 +57,14 @@ def GenerateRandomDNA(length):
 	return DNA
 
 def GenerateSingleRandomSequence(template):
-	'''Takes a string with letters A,T,C,G,N and returns a DNA string with rnadom AGTC nucleotides at position(s) with N.'''
-	dna=''
-	for i,nt in enumerate(template):
-		if nt=='N':
-			dna+=GenerateRandomDNA(1)
-		else:
-			dna+=nt
-	return dna
+        '''Takes a string with letters A,T,C,G,IUPAC and returns a DNA string with rnadom AGTC nucleotides at position(s) with N.'''
+        dna=''
+        for i,nt in enumerate(template):
+                if nt not in ATGC:
+                        dna+=choice(Iupac2AllNt[nt])
+                else:
+                        dna+=nt
+        return dna
 
 def GenerateAllPossibleSequences(template):
 	'''Takes a string with letters A,T,C,G,N and returns all possible DNA strings converting N=>A,T,G,C'''
@@ -68,24 +88,6 @@ def hamming(str1, str2):
 		raise ValueError("Strand lengths are not equal!")
 	else:
 		return sum(1 for (a, b) in zip(str1, str2) if a != b)
-
-Iupac2AllNt= {
-	'A':['A'],
-	'C':['C'],
-	'G':['G'],
-	'T':['T'],
-	'R':['A','G'],
-	'Y':['C','T'],
-	'S':['G','C'],
-	'W':['A','T'],
-	'K':['G','T'],
-	'M':['A','C'],
-	'B':['C','G','T'],
-	'D':['A','G','T'],
-	'H':['A','C','T'],
-	'V':['A','C','G'],
-	'N':['A','C','G','T'],
-}
 
 def IupacToAllPossibleSequences(dna):
 	'''Takes DNA with IUPAC letters and returns all possible DNA strings with only A/G/T/C.'''
