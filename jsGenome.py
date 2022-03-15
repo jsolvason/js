@@ -8,7 +8,8 @@ def getLiftoverObject(startGenome,endGenome):
     '''A method to create a liftover object for jsg.liftover()'''
     return LiftOver(startGenome, endGenome)
 
-def liftover(liftOverObject,c,s):
+def liftover_pos(liftOverObject,c,s):
+    '''A method to liftover a single chrom/pos pair'''
     strloResults = liftOverObject.convert_coordinate(c,s)
     if (strloResults==[]): return False
     else:
@@ -16,8 +17,8 @@ def liftover(liftOverObject,c,s):
         if c!=hg38chrom:     return 'Chrom1≠Chrom2'
         else:                return hg38chrom,hg38pos
 
-def liftover_interval(liftOverObject,c,s,e):
-    '''A method to liftover coordinates from previous to current genome. requires pyliftover'''
+def liftover_start_end(liftOverObject,c,s,e):
+    '''A method to liftover a chrom/start/end.'''
     strloResults = liftOverObject.convert_coordinate(c,s)
     endloResults   = liftOverObject.convert_coordinate(c,e)
 
@@ -39,19 +40,20 @@ def liftover_interval(liftOverObject,c,s,e):
         else:
             return hg38chrom,hg38s,hg38e
 
-def liftover_interval_batch(in_bed,loObject):
+def liftover_interval_batch(in_bed,loObject,out_bed):
     '''A method to liftover intervals (chrom,start,end) from an entire bed file'''
 
     line_out=''
     n=0
     fail_list=[]
+    warning_interval_flip=0
     for row in js.read_tsv(in_bed,pc=False,header=False):
         n+=1
         
         chrom,start,end=row
         start,end=int(start),int(end)
 
-        lo=liftover_interval(loObject,chrom,start,end)
+        lo=liftover_start_end(loObject,chrom,start,end)
         
         # If lo fails
         if lo==False or type(lo)==str:         
@@ -60,11 +62,18 @@ def liftover_interval_batch(in_bed,loObject):
         # if low success
         else:             
             newChrom,newStart,newEnd=lo
-            line_out+=js.write_row([newChrom,newStart,newEnd])
-    
+            if newStart<newEnd: 
+                line_out+=js.write_row([newChrom,newStart,newEnd])
+            else:
+                line_out+=js.write_row([newChrom,newEnd,newStart])
+                warning_interval_flip+=1
+
     errors=100 * pd.Series(fail_list).value_counts() / n
     
-    return line_out,errors
+    print(f'Warning: {warning_interval_flip} intervals had start>end')
+    print(errors)
+
+    with open(out_bed,'w') as f: f.write(line_out)
 
 def parse_cse(cse):
     '''A method to convert genome broser coords (ie chr1:1,000,000-1,200,000) to python variables.'''
