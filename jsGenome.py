@@ -11,11 +11,13 @@ def getLiftoverObject(startGenome,endGenome):
 def liftover_pos(liftOverObject,c,s):
     '''A method to liftover a single chrom/pos pair'''
     strloResults = liftOverObject.convert_coordinate(c,s)
-    if (strloResults==[]): return False
+    if (strloResults==[]): return False,'NotFound'
     else:
         hg38chrom,hg38pos,strand,score=strloResults[0]
-        if c!=hg38chrom:     return 'Chrom1≠Chrom2'
-        else:                return hg38chrom,hg38pos
+        if c!=hg38chrom:     
+            return False,'ChrOld≠ChrNew'
+        else:                
+            return hg38chrom,hg38pos
 
 def liftover_start_end(liftOverObject,c,s,e):
     '''A method to liftover a chrom/start/end.'''

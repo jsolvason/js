@@ -68,7 +68,7 @@ def read_tsv(fn,pc,header,breakBool=False,sep='\t',pc_list=False):
                         continue
             yield a
 
-def dprint(d,n):
+def dprint(d,n=0):
     for i,(k,v) in enumerate(d.items()):
         if i<=n:
             print(k,v)
