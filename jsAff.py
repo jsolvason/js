@@ -1,5 +1,5 @@
-ets=set(['GGAA','GGAT','TTCC','ATCC'])
-gata=set(['GATA','TATC'])
+etsCores=set(['GGAA','GGAT','TTCC','ATCC'])
+gataCores=set(['GATA','TATC'])
 
 def loadEts(ref  =f'/Users/joe/code/ref/binding_affinity/ets/parsed_Ets1_8mers.txt'):
 	'''Ets1 from mouse. Returns dictionary with key=8mer dna sequence, value=affinity (0-1.0)'''
