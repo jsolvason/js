@@ -1,5 +1,18 @@
 import os
 import datetime
+import pandas as pd
+
+def tsv_to_excel(inTsv,outExcel=''):
+    '''A method to write a .tsv to .xlsx'''
+    
+    # Create default name if no name given
+    if outExcel=='': outExcel=inTsv+'.xlsx'
+    
+    # ensure suffix is correctr 
+    if '.xlsx' not in outExcel: raise ValueError('Name must end in .xlsx')
+    
+    df=pd.read_csv(inTsv,sep='\t')
+    df.to_excel(outExcel,index=None,header=None)
 
 def flatten_list(l):
     return [i for sublist in l for i in sublist]

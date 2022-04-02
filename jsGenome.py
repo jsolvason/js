@@ -49,11 +49,13 @@ def liftover_interval_batch(in_bed,loObject,out_bed):
     n=0
     fail_list=[]
     warning_interval_flip=0
+    #NewCoord2OldCoord={}
     for row in js.read_tsv(in_bed,pc=False,header=False):
         n+=1
         
         chrom,start,end=row
         start,end=int(start),int(end)
+        #if (chrom,start,end) in NewCoord2OldCoord: raise ValueError('Duplicate region detected')
 
         lo=liftover_start_end(loObject,chrom,start,end)
         
@@ -61,21 +63,26 @@ def liftover_interval_batch(in_bed,loObject,out_bed):
         if lo==False or type(lo)==str:         
             fail_list.append(lo)
         
-        # if low success
+        # if lo success
         else:             
             newChrom,newStart,newEnd=lo
             if newStart<newEnd: 
                 line_out+=js.write_row([newChrom,newStart,newEnd])
+                #NewCoord2OldCoord[(chrom,start,end)]=(newChrom,newStart,newEnd)
             else:
                 line_out+=js.write_row([newChrom,newEnd,newStart])
+                #NewCoord2OldCoord[(chrom,start,end)]=(newChrom,newEnd,newStart)
                 warning_interval_flip+=1
-
+    
     errors=100 * pd.Series(fail_list).value_counts() / n
     
-    print(f'Warning: {warning_interval_flip} intervals had start>end')
+    if warning_interval_flip>0:
+        print(f'Warning: {warning_interval_flip} intervals had start>end')
+    print('Percent of error cases:')
     print(errors)
 
     with open(out_bed,'w') as f: f.write(line_out)
+    #with open(out_bed+'.new2old.pydict.pickle','wb') as f: pickle.dump(NewCoord2OldCoord,f,protocol=pickle.HIGHEST_PROTOCOL)
 
 def parse_cse(cse):
     '''A method to convert genome broser coords (ie chr1:1,000,000-1,200,000) to python variables.'''
