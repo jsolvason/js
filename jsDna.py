@@ -41,6 +41,13 @@ def count_with_revcomp(pattern,seq):
 	else:
 		return c
 
+def count_with_revcomp_re(re_pattern,length,seqFwd):
+    '''A method to search dna sequence using re expression allowing for overlaps.'''
+    c=0
+    for seq in [seqFwd,jsd.revcomp(seqFwd)]:
+        for kmer in jsd.get_kmers(seq,length):
+            if re.search(re_pattern,kmer): c+=1
+    return c
 
 def get_kmers(string,k):
 	'''Takes DNA sequence as input and a kmer length and YIELDS all kmers of length K in the sequence.'''

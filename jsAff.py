@@ -1,6 +1,11 @@
 etsCores=set(['GGAA','GGAT','TTCC','ATCC'])
 gataCores=set(['GATA','TATC'])
 
+def loadAff(ref):
+        '''Load an arbitrary affinity dataset, value=affinity (0-1.0)'''
+        Seq2EtsAff  = {line.split('\t')[0]:float(line.split('\t')[1]) for line in open(ref,'r').readlines()}
+        return Seq2EtsAff
+
 def loadEts(ref  =f'/Users/joe/code/ref/binding_affinity/ets/parsed_Ets1_8mers.txt'):
 	'''Ets1 from mouse. Returns dictionary with key=8mer dna sequence, value=affinity (0-1.0)'''
 	Seq2EtsAff  = {line.split('\t')[0]:float(line.split('\t')[1]) for line in open(ref,'r').readlines()}

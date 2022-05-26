@@ -4,6 +4,23 @@ import pickle
 import pandas as pd
 import js
 
+def generate_Chrom2NumStartEnd(chr2seq):
+    '''Generates obj for choose_random_chrom_pos()'''
+    Chrom2NumStartEnd={}  
+    n=0
+    for chrom,seq in chr2seq.items():
+        begin=n
+        end=begin+len(seq)
+        Chrom2NumStartEnd[chrom]=(begin,end)
+        n=end
+    return genomeLen,Chrom2NumStartEnd
+
+def choose_random_chrom_pos(genomeLen,Chrom2NumStartEnd):
+    n=np.random.randint(genomeLen)
+    for chrom,(start,end) in Chrom2NumStartEnd.items():
+        if n>= start and n<=end:
+            return chrom,n-start
+
 def getLiftoverObject(startGenome,endGenome):
     '''A method to create a liftover object for jsg.liftover()'''
     return LiftOver(startGenome, endGenome)
@@ -12,6 +29,7 @@ def liftover_pos(liftOverObject,c,s):
     '''A method to liftover a single chrom/pos pair'''
     strloResults = liftOverObject.convert_coordinate(c,s)
     if (strloResults==[]): return False,'NotFound'
+    if (strloResults==None): return False,'NotFound'
     else:
         hg38chrom,hg38pos,strand,score=strloResults[0]
         if c!=hg38chrom:     
