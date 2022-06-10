@@ -8,6 +8,8 @@ To install these scripts I suggest doing the following:
 
 1. Create folder in home directory called pybin. Open terminal then type 
 
+    ```cd ~```
+    
     ```mkdir ~/pybin```
 
 2. Clone this github repo into pybin. 
