@@ -1,5 +1,6 @@
 from random import choice
 import itertools
+import re
 
 Iupac2AllNt= {
         'A':['A'],
@@ -44,8 +45,8 @@ def count_with_revcomp(pattern,seq):
 def count_with_revcomp_re(re_pattern,length,seqFwd):
     '''A method to search dna sequence using re expression allowing for overlaps.'''
     c=0
-    for seq in [seqFwd,jsd.revcomp(seqFwd)]:
-        for kmer in jsd.get_kmers(seq,length):
+    for seq in [seqFwd,revcomp(seqFwd)]:
+        for kmer in get_kmers(seq,length):
             if re.search(re_pattern,kmer): c+=1
     return c
 

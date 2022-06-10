@@ -1,9 +1,25 @@
 import os
 import datetime
 import pandas as pd
+import time
+
+import time
+
+def time_iter_progress(lc,n,timestart,end='\n'):
+    '''Time processing or analysis progress.'''
+    
+    timenow=time.time()
+    minElapsed=(timenow-timestart)/60
+    lcPerMin=lc/minElapsed
+    
+    lcRemain=n-lc
+    minRemain=lcRemain/lcPerMin
+    
+    print(f'{js.percent(lc/n)} complete ({round(minRemain,1)} min remain)')
+
 
 def text2md5(md5fn,parse_type):
-    
+    '''Create md52fn pydict for ensuring md5sums are correct.'''
     if parse_type  not in ['linux','mac']: raise ValueError('parse_type not supported')
     
     if parse_type=='linux':
@@ -28,7 +44,8 @@ def text2md5(md5fn,parse_type):
     return md52fn
 
 def md5_comparison(md52fn1,title1,md52fn2,title2):
-    
+    '''Compare md5s of files at two locations to ensure successful datatransfer'''
+
     fn2md51={v:k for k,v in md52fn1.items()}
     fn2md52={v:k for k,v in md52fn2.items()}
     
@@ -113,13 +130,14 @@ def md5_comparison(md52fn1,title1,md52fn2,title2):
     else: print('\n==> All Files OK')
 
 def md5_comparison_from_filenames(fn1,parsetype1,title1,fn2,parsetype2,title2):
+    '''Wrapper function to simply plug in two md5.txt files and compare md5 sums'''
     md52fn1=text2md5(fn1,parsetype1)
     md52fn2=text2md5(fn2,parsetype2)
     md5_comparison(md52fn1,title1,md52fn2,title2)
 
     
 def tsv_to_excel(inTsv,outExcel=''):
-    '''A method to write a .tsv to .xlsx'''
+    '''Convert a .tsv to .xlsx'''
     
     # Create default name if no name given
     if outExcel=='': outExcel=inTsv+'.xlsx'
@@ -131,48 +149,50 @@ def tsv_to_excel(inTsv,outExcel=''):
     df.to_excel(outExcel,index=None,header=None)
 
 def flatten_list(l):
+    '''Returns [1,2,3,4] for inputted [[1,2],[3,4]]'''
     return [i for sublist in l for i in sublist]
 
 
 def replace_chars_with_null(string,charList):
+    '''Deletes all input characters in string'''
     for c in charList:
         string=string.replace(c,'')
     return string
 
 def get_todays_datestring(format="%Y%m%d"):
+    '''Get todays date as string formatted YYYYMMDD'''
     dateString=datetime.date.today().strftime(format)
     return dateString
 
 def get_basename(fn):
+    '''Get basename of file. e.g. /path/to/file.suff1.txt => file'''
     return fn.split('/')[-1].split('.')[0]
-
-def listModules():
-    lsResult=os.popen("ls /Users/joe/pybin/js/js*.py").read().split('\n')
-    lsResult=[i.split('/')[-1] for i in lsResult]
-    for i in lsResult: print(i)
 
 def mkdir_if_dir_not_exists(out_dir):
+    '''Make a directory only if that directory doesnt exist'''
     if not os.path.exists(out_dir): os.mkdir(out_dir)
 
-def basename(fn):
-    return fn.split('/')[-1].split('.')[0]
-
 def percent(number,rounding_digit=1):
+    '''Get percent of fraction'''
     if rounding_digit==0:
-        return str(int(100*number))+' %'
+        return str(int(100*number))+'%'
     else:
-        return str(round(100*number,rounding_digit))+' %'                                             
+        return str(round(100*number,rounding_digit))+'%'                                             
 
 def million(number):
+    '''Get number in terms of million'''
     return str(round(number/1e6,2))+ ' mil'
 
 def write_row(rowList,delim='\t'):
+    '''Write a single row of a tsv file.'''
     return delim.join([str(i) for i in rowList])+'\n'
 
 def strjoin(delim,l):
+    '''Join items in a list into a string'''
     return delim.join([str(i) for i in l])
 
 def read_tsv(fn,pc,header,breakBool=False,sep='\t',pc_list=False):
+    '''Read a tsv file'''
     with open(fn,'r') as f:
         
         # If printing columns, skip header
@@ -198,6 +218,7 @@ def read_tsv(fn,pc,header,breakBool=False,sep='\t',pc_list=False):
             yield a
 
 def dprint(d,n=0):
+    '''Print a dictionary'''
     for i,(k,v) in enumerate(d.items()):
         if i<=n:
             print(k,v)

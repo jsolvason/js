@@ -2,22 +2,43 @@ from Bio import SeqIO
 import gzip
 import jsDna as jsd
 
-def read_fastq(fn,is_gzip=False,get_quality=False,print_progress=False):
+def linker_parse(seq,linker,max_hamming_dist,pos):
     
-    if gzip: open_func=gzip.open(fn,'rt')
-    else:    open_func=open(fn,'r')
-        
-    with open_func as handle:
-        
-        for record in SeqIO.parse(handle, "fastq"):
-                
-            qualityList=record.letter_annotations["phred_quality"]
-            seq=str(record.seq)
+    linkerLen=len(linker)    
+    putativeLinker=seq[pos:pos+linkerLen]
+    
+    if putativeLinker==linker:
+        return seq.split(linker)
+    else:
+        d=jsd.hamming(putativeLinker,linker)
+        if d<=max_hamming_dist:
+            return seq.split(putativeLinker)
 
-            if get_quality:
-                yield seq,qualityList
-            else:
-                yield seq
+def linker_parse_pos(seq,linker,pos,max_right,max_left,max_hamming_dist):
+    '''Parses sequence using a linker. First start looks at pos. Allows 
+for mismatches up to max_hamming_dist. Then looks left/right until you 
+reach max_right and max_left. If you look max_right=1 and max_left=2 you 
+will look at 29,30,31,32'''
+    
+    #######################################
+    # Check if at expected location
+    #######################################
+    
+    result=linker_parse(seq,linker,max_hamming_dist,pos)
+    if result: return result
+    else:      pass
+        
+    #######################################
+    # Check at +/- loc
+    #######################################
+    
+    for posi in range(pos-max_left-1,pos+max_right):
+        result=linker_parse(seq,linker,max_hamming_dist,posi)
+        if result: return result
+        else:      continue
+        
+    return False
+
 
 esp3i='CGTCTC'
 bbsi='GAAGAC'

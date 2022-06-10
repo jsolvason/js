@@ -3,9 +3,11 @@ from pyliftover import LiftOver
 import pickle
 import pandas as pd
 import js
+import numpy as np
 
 def generate_Chrom2NumStartEnd(chr2seq):
     '''Generates obj for choose_random_chrom_pos()'''
+    genomeLen=sum([len(seq) for seq in chr2seq.values()])
     Chrom2NumStartEnd={}  
     n=0
     for chrom,seq in chr2seq.items():
